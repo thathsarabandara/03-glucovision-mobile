@@ -191,52 +191,6 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
             ),
           ),
 
-          // ── Top Blue Loading Strips ──
-          Positioned(
-            top: MediaQuery.of(context).padding.top + 12,
-            left: 24,
-            right: 24,
-            child: AnimatedBuilder(
-              animation: _loadingCtrl,
-              builder: (context, _) {
-                return Row(
-                  children: List.generate(
-                    3,
-                    (index) {
-                      double segmentProgress;
-                      if (index == 0) {
-                        segmentProgress = (_loadingCtrl.value * 3).clamp(0.0, 1.0);
-                      } else if (index == 1) {
-                        segmentProgress = ((_loadingCtrl.value - 1 / 3) * 3).clamp(0.0, 1.0);
-                      } else {
-                        segmentProgress = ((_loadingCtrl.value - 2 / 3) * 3).clamp(0.0, 1.0);
-                      }
-
-                      return Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 2.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(2),
-                            child: LinearProgressIndicator(
-                              value: segmentProgress,
-                              backgroundColor: isDark
-                                  ? AppTheme.surfaceDark
-                                  : AppTheme.surfaceHighlight,
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                isDark ? const Color(0xFF60A5FA) : const Color(0xFF2563EB),
-                              ),
-                              minHeight: 4,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
-
           // ── Centered Logo ──
           Center(
             child: GlucoVisionLogoWidget(
