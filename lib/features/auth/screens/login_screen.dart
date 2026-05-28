@@ -234,6 +234,24 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 36),
+                    
+                    // 3. Data Collection Shortcut
+                    TextButton.icon(
+                      onPressed: () {
+                        // Bypass auth entirely for data collection
+                        context.go('/data-collect');
+                      },
+                      icon: const Icon(LucideIcons.database, size: 16, color: AppTheme.textSecondary),
+                      label: const Text(
+                        'Data Collection Mode',
+                        style: TextStyle(
+                          color: AppTheme.textSecondary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
