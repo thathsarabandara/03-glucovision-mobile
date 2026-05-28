@@ -139,33 +139,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 14.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Top progress indicator strips
-                  Row(
-                    children: List.generate(
-                      _slides.length,
-                      (index) {
-                        final double progress = (_currentPageValue - index + 1.0).clamp(0.0, 1.0);
-                        return Expanded(
-                          child: Container(
-                            height: 4,
-                            margin: const EdgeInsets.symmetric(horizontal: 3.0),
-                            decoration: BoxDecoration(
-                              color: Color.lerp(
-                                isDark ? AppTheme.surfaceHighlightDark : AppTheme.surfaceHighlight,
-                                activeColor,
-                                progress,
-                              ),
-                              borderRadius: BorderRadius.circular(2),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
                   const SizedBox(height: 24),
                   
                   // App Brand Logo Banner
@@ -188,7 +165,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                             ),
                           ),
                           Text(
-                            'AI  ·  METABOLIC  HEALTH',
+                            'Connect.Protect.Care',
                             style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               fontWeight: FontWeight.w500,
                               letterSpacing: 1.5,
@@ -257,7 +234,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                   left: 0,
                                   right: 0,
                                   bottom: 10,
-                                  height: 180,
+                                  height: 280,
                                   child: Opacity(
                                     opacity: textOpacity,
                                     child: Transform.translate(
@@ -300,6 +277,106 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                                                 ),
                                               ),
                                             ),
+                                            const SizedBox(height: 16),
+
+                                            // Bottom minimal navigation row
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                // Skip
+                                                TextButton(
+                                                  onPressed: () => context.push('/register'),
+                                                  style: TextButton.styleFrom(
+                                                    foregroundColor: isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondary,
+                                                  ),
+                                                  child: const Text(
+                                                    'Skip',
+                                                    style: TextStyle(
+                                                      fontWeight: FontWeight.bold,
+                                                      fontSize: 14,
+                                                    ),
+                                                  ),
+                                                ),
+                                                
+                                                // Progress indicators
+                                                Row(
+                                                  children: List.generate(
+                                                    _slides.length,
+                                                    (index) {
+                                                      final double distance = (index - _currentPageValue).abs();
+                                                      final double scale = (distance <= 1.0) ? (1.0 - distance) : 0.0;
+                                                      final double width = 8.0 + (12.0 * scale);
+                                                      
+                                                      return AnimatedContainer(
+                                                        duration: const Duration(milliseconds: 150),
+                                                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                                                        height: 8,
+                                                        width: width,
+                                                        decoration: BoxDecoration(
+                                                          color: distance < 0.5 
+                                                              ? activeColor 
+                                                              : (isDark ? AppTheme.surfaceHighlightDark : AppTheme.surfaceHighlight),
+                                                          borderRadius: BorderRadius.circular(4),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                                
+                                                // Next/Get Started Button
+                                                ElevatedButton(
+                                                  onPressed: () {
+                                                    if (_currentPage < _slides.length - 1) {
+                                                      _pageController.nextPage(
+                                                        duration: const Duration(milliseconds: 400),
+                                                        curve: Curves.easeInOutCubic,
+                                                      );
+                                                    } else {
+                                                      context.push('/register');
+                                                    }
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: activeColor,
+                                                    foregroundColor: Colors.white,
+                                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.circular(20),
+                                                    ),
+                                                    elevation: 2,
+                                                  ),
+                                                  child: Text(
+                                                    _currentPage < _slides.length - 1 ? 'Next' : 'Get Started',
+                                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 16),
+                                            
+                                            // Login redirection
+                                            Center(
+                                              child: TextButton(
+                                                onPressed: () => context.push('/login'),
+                                                child: RichText(
+                                                  text: TextSpan(
+                                                    text: 'Already have an account? ',
+                                                    style: TextStyle(
+                                                      color: isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondary,
+                                                      fontSize: 13,
+                                                    ),
+                                                    children: [
+                                                      TextSpan(
+                                                        text: 'Log In',
+                                                        style: TextStyle(
+                                                          color: activeColor,
+                                                          fontWeight: FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -311,106 +388,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           },
                         );
                       },
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Bottom minimal navigation row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Skip
-                      TextButton(
-                        onPressed: () => context.push('/register'),
-                        style: TextButton.styleFrom(
-                          foregroundColor: isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondary,
-                        ),
-                        child: const Text(
-                          'Skip',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ),
-                      
-                      // Progress indicators
-                      Row(
-                        children: List.generate(
-                          _slides.length,
-                          (index) {
-                            final double distance = (index - _currentPageValue).abs();
-                            final double scale = (distance <= 1.0) ? (1.0 - distance) : 0.0;
-                            final double width = 8.0 + (12.0 * scale);
-                            
-                            return AnimatedContainer(
-                              duration: const Duration(milliseconds: 150),
-                              margin: const EdgeInsets.symmetric(horizontal: 3),
-                              height: 8,
-                              width: width,
-                              decoration: BoxDecoration(
-                                color: distance < 0.5 
-                                    ? activeColor 
-                                    : (isDark ? AppTheme.surfaceHighlightDark : AppTheme.surfaceHighlight),
-                                borderRadius: BorderRadius.circular(4),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      
-                      // Next/Get Started Button
-                      ElevatedButton(
-                        onPressed: () {
-                          if (_currentPage < _slides.length - 1) {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 400),
-                              curve: Curves.easeInOutCubic,
-                            );
-                          } else {
-                            context.push('/register');
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: activeColor,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          elevation: 2,
-                        ),
-                        child: Text(
-                          _currentPage < _slides.length - 1 ? 'Next' : 'Get Started',
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  
-                  // Login redirection
-                  Center(
-                    child: TextButton(
-                      onPressed: () => context.push('/login'),
-                      child: RichText(
-                        text: TextSpan(
-                          text: 'Already have an account? ',
-                          style: TextStyle(
-                            color: isDark ? AppTheme.textSecondaryDark : AppTheme.textSecondary,
-                            fontSize: 13,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: 'Log In',
-                              style: TextStyle(
-                                color: activeColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
                   ),
                 ],
