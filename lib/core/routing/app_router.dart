@@ -57,6 +57,13 @@ import '../../features/settings/screens/user_profile_screen.dart';
 import '../../features/settings/screens/privacy_security_screen.dart';
 import '../../features/settings/screens/language_settings_screen.dart';
 import '../../features/admin/screens/admin_dashboard_screen.dart';
+import '../../features/data_collect/screens/dashboard_screen.dart';
+import '../../features/data_collect/screens/session_setup_screen.dart';
+import '../../features/data_collect/screens/guided_capture_screen.dart';
+import '../../features/data_collect/screens/record_list_screen.dart';
+import '../../features/data_collect/screens/food_list_screen.dart';
+import '../../features/data_collect/screens/add_food_screen.dart';
+import '../../features/data_collect/screens/data_collect_shell.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/',
@@ -133,5 +140,18 @@ final GoRouter appRouter = GoRouter(
     GoRoute(path: '/language-settings', builder: (context, state) => const LanguageSettingsScreen()),
     // --- Module 11: Admin ---
     GoRoute(path: '/admin-dashboard', builder: (context, state) => const AdminDashboardScreen()),
+    // --- Data Collect ---
+    StatefulShellRoute.indexedStack(builder: (context, state, navigationShell) {return DataCollectShell(navigationShell: navigationShell);},
+      branches: [
+        StatefulShellBranch(routes: [GoRoute(path: '/data-collect',builder: (context, state) => const DashboardScreen(),),],),
+        StatefulShellBranch(routes: [GoRoute(path: '/data-collect/food-list',builder: (context, state) => const FoodListScreen(),),],),
+        StatefulShellBranch(routes: [GoRoute(path: '/data-collect/records',builder: (context, state) => const RecordListScreen(),),],),
+      ],
+    ),
+    GoRoute(path: '/data-collect/session-setup', builder: (context, state) => const SessionSetupScreen()),
+    GoRoute(path: '/data-collect/add-food', builder: (context, state) => const AddFoodScreen()),
+    GoRoute(path: '/data-collect/capture', builder: (context, state) {final extra = state.extra as Map<String, dynamic>? ?? {}; return GuidedCaptureScreen(sessionParams: extra);}),
+    GoRoute(path: '/data-collect/records', builder: (context, state) => const RecordListScreen()),
+    GoRoute(path: '/data-collect/food-list', builder: (context, state) => const FoodListScreen()),
   ],
 );
